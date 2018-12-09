@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>AnotherTestAutomationApps</groupId>
+    <artifactId>AnotherTestAutomationApps</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <properties>
+        <!--plugins-->
+        <version.maven-compiler-plugin>3.8.0</version.maven-compiler-plugin>
+        <version.maven-surefire-plugin>2.22.1</version.maven-surefire-plugin>
+
+        <!--dependencies-->
+        <version.junit5>5.3.1</version.junit5>
+        <version.assertj>3.11.1</version.assertj>
+        <version.selenium>3.14.0</version.selenium>
+        <version.mockito>2.23.0</version.mockito>
+        <version.log4J>2.11.1</version.log4J>
+        <version.slf4j-api>1.7.25</version.slf4j-api>
+        <version.log4j-slf4j-impl>2.11.1</version.log4j-slf4j-impl>
+        <version.commons-lang3>3.8.1</version.commons-lang3>
+    </properties>
+
+    <build>
+        <plugins>
+            <!--The Compiler Plugin has two goals. Both are already bound to their proper phases within the Maven Lifecycle and are therefore,-->
+            <!--automatically executed during their respective phases.-->
+            <!--compiler:compile is bound to the compile phase and is used to compile the main source files.-->
+            <!--compiler:testCompile is bound to the test-compile phase and is used to compile the test source files.-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${version.maven-compiler-plugin}</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+            <!--https://maven.apache.org/surefire/maven-surefire-plugin/examples/junit.html-->
+            <!--<configuration>-->
+            <!--<groups>com.mycompany.SlowTests</groups>-->
+            <!--</configuration>-->
+            <!--The Surefire Plugin has only one goal:-->
+            <!--surefire:test runs the unit tests of an application.-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${version.maven-surefire-plugin}</version>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+        <!-- https://mvnrepository.com/artifact/junit/junit -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>${version.junit5}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>${version.junit5}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.vintage</groupId>
+            <artifactId>junit-vintage-engine</artifactId>
+            <version>5.3.1</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-params -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+            <version>5.3.1</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.assertj/assertj-core -->
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>${version.assertj}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <version>${version.selenium}</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.mockito/mockito-core -->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>${version.mockito}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!--Available Goals (which are meant to be used together; the only reason they are separated is for code readability):-->
+
+        <!--commons-release:detach-distributions - Remove tar.gz, tar.gz.asc, zip, and zip.asc files from being uploaded-->
+        <!--to nexus and copy them to the target/commons-release-plugin directory.-->
+
+        <!--commons-release:compress-site - Generate site.zip file in the target/commons-release-plugin directory.-->
+        <!--commons-release:stage-distributions - Take all staged files in the target/commons-release-plugin directory,-->
+        <!---->
+        <!--and the RELEASE-NOTES.txt from the root of the project, and commit them to a specified staging subversion repository.-->
+        <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${version.commons-lang3}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>${version.log4J}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>${version.log4J}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${version.slf4j-api}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-slf4j-impl -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j-impl</artifactId>
+            <version>${version.log4j-slf4j-impl}</version>
+        </dependency>
+
+
+
+    </dependencies>
+
+
+
+</project>
