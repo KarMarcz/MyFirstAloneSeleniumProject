@@ -10,6 +10,6 @@ public class WebDriverProvider {
     }
     public static final WebDriver WebDriverProvider() {
         startChromeDriver();
-        return new ChromeDriver();
+        return (WebDriver) new ChromeDriver();
     }
 }
