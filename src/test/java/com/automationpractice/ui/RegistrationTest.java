@@ -36,4 +36,12 @@ public class RegistrationTest {
     public void tearDown () {
         driver.close();
     }
+    /*Zadania:
+    -Parametrize Test - DDT
+    -Przekazywanie danych dalej
+    -Ze wzgledu na dane Takie operowanie nimi żeby zawsze asercje sprawdzialy to co powinny dla odpowiednich danych typu:
+    Jeżeli ktoś nie wpisał imienia to co się dzieje
+    Co będzie jak nie wpiszesz numeru
+    ...
+     */
 }
