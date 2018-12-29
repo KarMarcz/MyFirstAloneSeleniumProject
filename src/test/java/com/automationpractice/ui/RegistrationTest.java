@@ -35,12 +35,13 @@ public class RegistrationTest {
     }
     @ParameterizedTest
     @MethodSource
-    public void registrationTest (String email) {
+    public void registrationTest (String email, String gender, String firstName) {
         driver.get("http://automationpractice.com/index.php");
         mainPage.clickOnSingInButton();
         String fillEmailFieldAndClickcreateAnAccountButtonReturnMessage = auteticationPage.fillEmailFieldAndClickcreateAnAccountButton(email);
         assertThat(fillEmailFieldAndClickcreateAnAccountButtonReturnMessage).is(anyOf(emailCondition));
-        if(fillEmailFieldAndClickcreateAnAccountButtonReturnMessage.equals("Syntax correct for Email")) createAnAccountPage.fillingPersonalInformationAndAddressAndClickRegisterButton();
+        if(fillEmailFieldAndClickcreateAnAccountButtonReturnMessage.equals("Syntax correct for Email"))
+            createAnAccountPage.fillingPersonalInformationAndAddressAndClickRegisterButton(gender);
     }
     @AfterEach
     public void tearDown () {
@@ -49,7 +50,8 @@ public class RegistrationTest {
 
     static String[][] registrationTest () {
         return new String[][]{
-          new String[]{"karol@sss.pl"}
+          new String[]{"karol@sss.pl","M"},
+          new String[]{"karol@sss.pl","W"},
         };
     }
 

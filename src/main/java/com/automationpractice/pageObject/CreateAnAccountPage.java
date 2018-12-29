@@ -67,9 +67,18 @@ public class CreateAnAccountPage {
         select = new Select(countryDropDownListInAddress);
         select.selectByValue("21");
     }
-    public void fillingPersonalInformationAndAddressAndClickRegisterButton(){
+    public void fillingPersonalInformationAndAddressAndClickRegisterButton(String gender){
         waits.waitForElementToBeClickable(submitAccountInAddressButton);
-        maleGenderInPersonalIinformationRadioButton.click();
+        //Gender not Requaired. If | M=Male | W=Female | null = not selected
+        //Male
+        if(gender.equalsIgnoreCase("m")){
+            maleGenderInPersonalIinformationRadioButton.click();
+        }
+        //Female
+        if(gender.equalsIgnoreCase("w")){
+            femaleGenderInPersonalIinformationRadioButton.click();
+        }
+        //FirstName Requaired
         firstNameInPersonalIinformationInputField.sendKeys("aaaaaaa");
         lastNameInPersonalIinformationInputField.sendKeys("bbbbbbbbb");
         passwordInPersonalIinformationInputField.sendKeys("ccccc");
