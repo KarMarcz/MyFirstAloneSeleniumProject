@@ -82,24 +82,28 @@ public class CreateAnAccountPage {
         // ------------------------------------
         // -------Date Should have  DD-MM-YYYY pattern
         //Days always have 1-31 option value, so this is the only Required
-        select = new Select(daysDropDownListInPersonalIinformation);
-        if (Date.startsWith("0")) {
-            select.selectByValue(Date.substring(1, 2));
+        if(Pattern.matches("\\d{2}-\\d{2}-\\d{4}", Date)) {
+            select = new Select(daysDropDownListInPersonalIinformation);
+            if (Date.startsWith("0")) {
+                select.selectByValue(Date.substring(1, 2));
+            } else {
+                select.selectByValue(Date.substring(0, 2));
+            }
+            //Months have 1-12 option value
+            select = new Select(monthsDropDownListInPersonalIinformation);
+            if (Date.substring(3, 4).equals("0")) {
+                select.selectByValue(Date.substring(4, 5));
+            } else {
+                select.selectByValue(Date.substring(3, 5));
+            }
+            //Years are Selected strictly
+            select = new Select(yearsDropDownListInPersonalIinformation);
+            select.selectByValue(Date.substring(6));
         }
         else {
-            select.selectByValue(Date.substring(0, 2));
+            //Zamienić na Log
+            System.out.println("Mieciu pojebałeś date");
         }
-        //Months have 1-12 option value
-        select = new Select(monthsDropDownListInPersonalIinformation);
-        if (Date.substring(3,4).equals("0")){
-            select.selectByValue(Date.substring(4, 5));
-        }
-        else {
-            select.selectByValue(Date.substring(3, 5));
-        }
-        //Years are Selected strictly
-        select = new Select(yearsDropDownListInPersonalIinformation);
-        select.selectByValue(Date.substring(6));
         // ------------------------------------
         //There are 1-50 option value State
         select = new Select(stateDropDownListInAddress);
