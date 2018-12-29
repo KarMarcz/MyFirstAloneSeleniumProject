@@ -73,7 +73,7 @@ public class CreateAnAccountPage {
         select = new Select(countryDropDownListInAddress);
         select.selectByValue("21");
     }
-    public List<String> fillingPersonalInformationAndAddressAndClickRegisterButton(String gender, String firstName, String lastName){
+    public List<String> fillingPersonalInformationAndAddressAndClickRegisterButton(String gender, String firstName, String lastName, String passwd){
         waits.waitForElementToBeClickable(submitAccountInAddressButton);
         List<String> errors = new ArrayList<>();
         Boolean errorsOccured = false;
@@ -86,11 +86,13 @@ public class CreateAnAccountPage {
         if(gender.equalsIgnoreCase("w")){
             femaleGenderInPersonalIinformationRadioButton.click();
         }
-        //FirstName Requaired - | Only Letters |
+        //FirstName Required - | Only Letters |
         firstNameInPersonalIinformationInputField.sendKeys(firstName);
-        //Lastname Requaired - | Only Letters |
+        //LastName Required - | Only Letters |
         lastNameInPersonalIinformationInputField.sendKeys(lastName);
-        passwordInPersonalIinformationInputField.sendKeys("ccccc");
+        //PassWord Required - | minimum 5 char |
+        passwordInPersonalIinformationInputField.sendKeys(passwd);
+        // | State Required - Option value from 1 to 50 | Country Required - Only USA Available |
         manageDropDownList();
         firstNameInAddressInputField.sendKeys("aaaaaaa");
         lastNameInAddressInputField.sendKeys("bbbbbbbbb");
@@ -100,11 +102,11 @@ public class CreateAnAccountPage {
         postalCodeInAddressInputField.sendKeys("00000");
         mobilePhoneInAddressInputField.sendKeys("1234567890");
         //Checking errors:
-        if (!(Pattern.matches("[a-zA-Z]+",firstName)) || !(Pattern.matches("[a-zA-Z]+",lastName))) {
+        if (!(Pattern.matches("[a-zA-Z]+",firstName)) || !(Pattern.matches("[a-zA-Z]+",lastName)) || !(Pattern.matches(".{5,}", passwd))) {
             errorsOccured = true;
         }
-        submitAccountInAddressButton.click();
         if (errorsOccured) {
+            submitAccountInAddressButton.click();
             waits.waitForElementToBeVisible(errorsFromBadDataPullingIntoRegisterField);
             if (errorsFromBadDataPullingIntoRegisterField.getText().contains("firstname is required.")) {
                 errors.add("firstname is required.");
@@ -117,6 +119,12 @@ public class CreateAnAccountPage {
             }
             if (errorsFromBadDataPullingIntoRegisterField.getText().contains("lastname is invalid.")) {
                 errors.add("lastname is invalid.");
+            }
+            if (errorsFromBadDataPullingIntoRegisterField.getText().contains("passwd is required.")){
+                errors.add("passwd is required.");
+            }
+            if (errorsFromBadDataPullingIntoRegisterField.getText().contains("passwd is invalid.")){
+                errors.add("passwd is invalid.");
             }
         }
         else{
