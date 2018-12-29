@@ -7,6 +7,10 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.Select;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Pattern;
+
 public class CreateAnAccountPage {
     @FindBy(id = "id_gender1")
     private WebElement maleGenderInPersonalIinformationRadioButton;
@@ -44,6 +48,8 @@ public class CreateAnAccountPage {
     private WebElement mobilePhoneInAddressInputField;
     @FindBy (id = "submitAccount")
     private WebElement submitAccountInAddressButton;
+    @FindBy (xpath = "//div[@class='alert alert-danger']")
+    private WebElement errorsFromBadDataPullingIntoRegisterField;
 
     private WebDriver driver;
     private Waits waits;
@@ -67,8 +73,10 @@ public class CreateAnAccountPage {
         select = new Select(countryDropDownListInAddress);
         select.selectByValue("21");
     }
-    public void fillingPersonalInformationAndAddressAndClickRegisterButton(String gender){
+    public List<String> fillingPersonalInformationAndAddressAndClickRegisterButton(String gender, String firstName, String lastName){
         waits.waitForElementToBeClickable(submitAccountInAddressButton);
+        List<String> errors = new ArrayList<>();
+        Boolean errorsOccured = false;
         //Gender not Requaired. If | M=Male | W=Female | null = not selected
         //Male
         if(gender.equalsIgnoreCase("m")){
@@ -78,9 +86,10 @@ public class CreateAnAccountPage {
         if(gender.equalsIgnoreCase("w")){
             femaleGenderInPersonalIinformationRadioButton.click();
         }
-        //FirstName Requaired
-        firstNameInPersonalIinformationInputField.sendKeys("aaaaaaa");
-        lastNameInPersonalIinformationInputField.sendKeys("bbbbbbbbb");
+        //FirstName Requaired - | Only Letters |
+        firstNameInPersonalIinformationInputField.sendKeys(firstName);
+        //Lastname Requaired - | Only Letters |
+        lastNameInPersonalIinformationInputField.sendKeys(lastName);
         passwordInPersonalIinformationInputField.sendKeys("ccccc");
         manageDropDownList();
         firstNameInAddressInputField.sendKeys("aaaaaaa");
@@ -90,6 +99,30 @@ public class CreateAnAccountPage {
         city1InAddressInputField.sendKeys("fffffffff");
         postalCodeInAddressInputField.sendKeys("00000");
         mobilePhoneInAddressInputField.sendKeys("1234567890");
+        //Checking errors:
+        if (!(Pattern.matches("[a-zA-Z]+",firstName)) || !(Pattern.matches("[a-zA-Z]+",lastName))) {
+            errorsOccured = true;
+        }
+        submitAccountInAddressButton.click();
+        if (errorsOccured) {
+            waits.waitForElementToBeVisible(errorsFromBadDataPullingIntoRegisterField);
+            if (errorsFromBadDataPullingIntoRegisterField.getText().contains("firstname is required.")) {
+                errors.add("firstname is required.");
+            }
+            if (errorsFromBadDataPullingIntoRegisterField.getText().contains("firstname is invalid.")) {
+                errors.add("firstname is invalid.");
+            }
+            if (errorsFromBadDataPullingIntoRegisterField.getText().contains("lastname is required.")) {
+                errors.add("lastname is required.");
+            }
+            if (errorsFromBadDataPullingIntoRegisterField.getText().contains("lastname is invalid.")) {
+                errors.add("lastname is invalid.");
+            }
+        }
+        else{
+            errors.add("Data correct");
+        }
 
+        return errors;
     }
 }
