@@ -9,6 +9,7 @@ import org.openqa.selenium.support.ui.Select;
 
 import java.util.*;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class CreateAnAccountPage {
     @FindBy(id = "id_gender1")
@@ -54,6 +55,11 @@ public class CreateAnAccountPage {
     private Waits waits;
     private Select select;
 
+    private class DateReturn {
+        Boolean errorsOccured = false;
+        List<String> errors = new ArrayList<>();
+    }
+
     private static final Map<String, Integer> statesInUSA;
 
     static {
@@ -78,10 +84,11 @@ public class CreateAnAccountPage {
         PageFactory.initElements(driver, this);
     }
 
-    private void manageDropDownList(String Date) {
+    private DateReturn manageDropDownList(String Date) {
         // ------------------------------------
         // -------Date Should have  DD-MM-YYYY pattern
         //Days always have 1-31 option value, so this is the only Required
+        DateReturn dateReturn = new DateReturn();
         if(Pattern.matches("\\d{2}-\\d{2}-\\d{4}", Date)) {
             select = new Select(daysDropDownListInPersonalIinformation);
             if (Date.startsWith("0")) {
@@ -101,8 +108,7 @@ public class CreateAnAccountPage {
             select.selectByValue(Date.substring(6));
         }
         else {
-            //Zamienić na Log
-            System.out.println("Mieciu pojebałeś date");
+            dateReturn.errors.add("Wrong birth date.");
         }
         // ------------------------------------
         //There are 1-50 option value State
@@ -111,6 +117,7 @@ public class CreateAnAccountPage {
         //Only USA can be Choose so always value 21
         select = new Select(countryDropDownListInAddress);
         select.selectByValue("21");
+        return dateReturn;
     }
 
     public List<String> fillingPersonalInformationAndAddressAndClickRegisterButton(String gender, String firstName, String lastName, String passwd, String Date) {
@@ -133,6 +140,7 @@ public class CreateAnAccountPage {
         //PassWord Required - | minimum 5 char |
         passwordInPersonalIinformationInputField.sendKeys(passwd);
         // | State Required - Option value from 1 to 50 | Country Required - Only USA Available |
+        errors = manageDropDownList(Date).errors.stream().collect(Collectors.toList());
         manageDropDownList(Date);
         firstNameInAddressInputField.sendKeys("aaaaaaa");
         lastNameInAddressInputField.sendKeys("bbbbbbbbb");
