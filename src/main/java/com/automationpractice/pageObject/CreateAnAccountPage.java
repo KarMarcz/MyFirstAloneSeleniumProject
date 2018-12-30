@@ -84,7 +84,7 @@ public class CreateAnAccountPage {
         PageFactory.initElements(driver, this);
     }
 
-    private DateReturn manageDropDownList(String Date) {
+    private DateReturn manageDropDownList(String Date, String stateOfUSA) {
         // ------------------------------------
         // -------Date Should have  DD-MM-YYYY pattern
         //Days always have 1-31 option value, so this is the only Required
@@ -103,7 +103,7 @@ public class CreateAnAccountPage {
             } else {
                 select.selectByValue(Date.substring(3, 5));
             }
-            //Years are Selected strictly
+            //Years are Selected strictly like | Year 1991 = "1991" | in option value
             select = new Select(yearsDropDownListInPersonalIinformation);
             select.selectByValue(Date.substring(6));
         }
@@ -111,19 +111,26 @@ public class CreateAnAccountPage {
             dateReturn.errors.add("Wrong birth date.");
         }
         // ------------------------------------
-        //There are 1-50 option value State
-        select = new Select(stateDropDownListInAddress);
-        select.selectByValue("18");
+        //There are 1-50 option value State but we will use only 10 for practise purpose
+        if(statesInUSA.get(stateOfUSA) != null) {
+            select = new Select(stateDropDownListInAddress);
+            select.selectByValue(String.valueOf(statesInUSA.get(stateOfUSA)));
+        }
+        else {
+            dateReturn.errorsOccured = true;
+        }
         //Only USA can be Choose so always value 21
         select = new Select(countryDropDownListInAddress);
         select.selectByValue("21");
         return dateReturn;
     }
 
-    public List<String> fillingPersonalInformationAndAddressAndClickRegisterButton(String gender, String firstName, String lastName, String passwd, String Date) {
+    public List<String> fillingPersonalInformationAndAddressAndClickRegisterButton(String gender, String firstName, String lastName, String passwd, String Date, String stateOfUSA) {
         waits.waitForElementToBeClickable(submitAccountInAddressButton);
         List<String> errors = new ArrayList<>();
         Boolean errorsOccured = false;
+
+        DateReturn dateReturn = new DateReturn();
         //Gender not Required. If | M=Male | W=Female | null = not selected
         //Male
         if (gender.equalsIgnoreCase("m")) {
@@ -140,8 +147,9 @@ public class CreateAnAccountPage {
         //PassWord Required - | minimum 5 char |
         passwordInPersonalIinformationInputField.sendKeys(passwd);
         // | State Required - Option value from 1 to 50 | Country Required - Only USA Available |
-        errors = manageDropDownList(Date).errors.stream().collect(Collectors.toList());
-        manageDropDownList(Date);
+        dateReturn = manageDropDownList(Date, stateOfUSA);
+        errors = dateReturn.errors.stream().collect(Collectors.toList());
+        errorsOccured = dateReturn.errorsOccured;
         firstNameInAddressInputField.sendKeys("aaaaaaa");
         lastNameInAddressInputField.sendKeys("bbbbbbbbb");
         companyNameInAddressInputField.sendKeys("dddddddd");
@@ -173,6 +181,9 @@ public class CreateAnAccountPage {
             }
             if (errorsFromBadDataPullingIntoRegisterField.getText().contains("passwd is invalid.")) {
                 errors.add("passwd is invalid.");
+            }
+            if(errorsFromBadDataPullingIntoRegisterField.getText().contains("This country requires you to choose a State.")){
+                errors.add("This country requires you to choose a State.");
             }
         } else {
             errors.add("Data correct");
