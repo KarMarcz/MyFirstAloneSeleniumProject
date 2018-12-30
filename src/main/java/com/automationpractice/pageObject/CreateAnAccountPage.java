@@ -76,6 +76,14 @@ public class CreateAnAccountPage {
         aMap.put("Georgia", 10);
         statesInUSA = Collections.unmodifiableMap(aMap);
     }
+    private static final Map<String, String> countrySaveInMap;
+
+    static {
+        Map<String, String> aMap = new TreeMap<>();
+        aMap.put("United States", "21");
+        aMap.put("-", "");
+        countrySaveInMap = Collections.unmodifiableMap(aMap);
+    }
 
     public CreateAnAccountPage(WebDriver driver) {
         this.driver = driver;
@@ -84,11 +92,13 @@ public class CreateAnAccountPage {
         PageFactory.initElements(driver, this);
     }
 
-    private DateReturn manageDropDownList(String Date, String stateOfUSA) {
+    private DateReturn manageDropDownList(String Date, String stateOfUSA, String country) {
         // ------------------------------------
         // -------Date Should have  DD-MM-YYYY pattern
         //Days always have 1-31 option value, so this is the only Required
         DateReturn dateReturn = new DateReturn();
+        select = new Select(countryDropDownListInAddress);
+        select.selectByValue(String.valueOf(""));
         if(Pattern.matches("\\d{2}-\\d{2}-\\d{4}", Date)) {
             select = new Select(daysDropDownListInPersonalIinformation);
             if (Date.startsWith("0")) {
@@ -111,21 +121,29 @@ public class CreateAnAccountPage {
             dateReturn.errors.add("Wrong birth date.");
         }
         // ------------------------------------
-        //There are 1-50 option value State but we will use only 10 for practise purpose
-        if(statesInUSA.get(stateOfUSA) != null) {
-            select = new Select(stateDropDownListInAddress);
-            select.selectByValue(String.valueOf(statesInUSA.get(stateOfUSA)));
+        // Need to country be selected first if its United States to choose State of It
+        //United State is set by default
+        if (countrySaveInMap.get(country) != null) {
+            //Only USA can be Choose so always value 21
+            select = new Select(countryDropDownListInAddress);
+            select.selectByValue(String.valueOf(countrySaveInMap.get(country)));
+            //There are 1-50 option value State but we will use only 10 for practise purpose
+            if (statesInUSA.get(stateOfUSA) != null) {
+                select = new Select(stateDropDownListInAddress);
+                select.selectByValue(String.valueOf(statesInUSA.get(stateOfUSA)));
+            } else {
+                dateReturn.errorsOccured = true;
+            }
+
+
         }
         else {
             dateReturn.errorsOccured = true;
         }
-        //Only USA can be Choose so always value 21
-        select = new Select(countryDropDownListInAddress);
-        select.selectByValue("21");
         return dateReturn;
     }
 
-    public List<String> fillingPersonalInformationAndAddressAndClickRegisterButton(String gender, String firstName, String lastName, String passwd, String Date, String stateOfUSA) {
+    public List<String> fillingPersonalInformationAndAddressAndClickRegisterButton(String gender, String firstName, String lastName, String passwd, String Date, String stateOfUSA, String country) {
         waits.waitForElementToBeClickable(submitAccountInAddressButton);
         List<String> errors = new ArrayList<>();
         Boolean errorsOccured = false;
@@ -146,10 +164,14 @@ public class CreateAnAccountPage {
         lastNameInPersonalIinformationInputField.sendKeys(lastName);
         //PassWord Required - | minimum 5 char |
         passwordInPersonalIinformationInputField.sendKeys(passwd);
+
         // | State Required - Option value from 1 to 50 | Country Required - Only USA Available |
-        dateReturn = manageDropDownList(Date, stateOfUSA);
+        dateReturn = manageDropDownList(Date, stateOfUSA, country);
         errors = dateReturn.errors.stream().collect(Collectors.toList());
         errorsOccured = dateReturn.errorsOccured;
+
+        //--------YOUR ADDRESS FIELDS----------
+        //TU SIĘ PIERDOLI!!!!!!!!!!
         firstNameInAddressInputField.sendKeys("aaaaaaa");
         lastNameInAddressInputField.sendKeys("bbbbbbbbb");
         companyNameInAddressInputField.sendKeys("dddddddd");
@@ -182,8 +204,14 @@ public class CreateAnAccountPage {
             if (errorsFromBadDataPullingIntoRegisterField.getText().contains("passwd is invalid.")) {
                 errors.add("passwd is invalid.");
             }
-            if(errorsFromBadDataPullingIntoRegisterField.getText().contains("This country requires you to choose a State.")){
+            if (errorsFromBadDataPullingIntoRegisterField.getText().contains("This country requires you to choose a State.")){
                 errors.add("This country requires you to choose a State.");
+            }
+            if (errorsFromBadDataPullingIntoRegisterField.getText().contains("Country cannot be loaded with address->id_country")){
+                errors.add("Country cannot be loaded with address->id_country");
+            }
+            if (errorsFromBadDataPullingIntoRegisterField.getText().contains("Country is invalid")){
+                errors.add("Country is invalid");
             }
         } else {
             errors.add("Data correct");

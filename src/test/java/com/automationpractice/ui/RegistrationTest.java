@@ -35,23 +35,23 @@ public class RegistrationTest {
     }
     @ParameterizedTest
     @MethodSource
-    public void registrationTest (String email, String gender, String firstName, String lastName, String passwd, String Date, String stateOfUSA) {
+    public void registrationTest (String email, String gender, String firstName, String lastName, String passwd, String Date, String stateOfUSA, String country) {
         driver.get("http://automationpractice.com/index.php");
         mainPage.clickOnSingInButton();
         String fillEmailFieldAndClickcreateAnAccountButtonReturnMessage = auteticationPage.fillEmailFieldAndClickcreateAnAccountButton(email);
         assertThat(fillEmailFieldAndClickcreateAnAccountButtonReturnMessage).is(anyOf(emailCondition));
         if(fillEmailFieldAndClickcreateAnAccountButtonReturnMessage.equals("Syntax correct for Email"))
-            System.out.println(createAnAccountPage.fillingPersonalInformationAndAddressAndClickRegisterButton(gender, firstName, lastName, passwd, Date, stateOfUSA));
+            System.out.println(createAnAccountPage.fillingPersonalInformationAndAddressAndClickRegisterButton(gender, firstName, lastName, passwd, Date, stateOfUSA, country));
     }
-    @AfterEach
-    public void tearDown () {
-        driver.close();
-    }
+//    @AfterEach
+//    public void tearDown () {
+//        driver.close();
+//    }
 
     static String[][] registrationTest () {
         return new String[][]{
-          new String[]{"karol@sss.pl","M","Michal","Wisnia2","asc", "12-08-199", "Alabaf"},
-          new String[]{"karol@sss.pl","W","Iwona","Poranek1","asdf1", "18-02-1990", "Colorado"},
+          new String[]{"karol@sss.pl","M","Michal","Wisnia2","asc", "12-08-199", "Alabaf", "-"},
+//          new String[]{"karol@sss.pl","W","Iwona","Poranek1","asdf1", "18-02-1990", "Colorado", "United States"},
         };
     }
 
