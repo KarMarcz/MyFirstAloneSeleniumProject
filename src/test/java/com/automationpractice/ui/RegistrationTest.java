@@ -50,8 +50,8 @@ public class RegistrationTest {
 
     static String[][] registrationTest () {
         return new String[][]{
-          new String[]{"karol@sss.pl","M","Michal","Wisnia2","asc", "12-08-199", "Alabaf", "-"},
-//          new String[]{"karol@sss.pl","W","Iwona","Poranek1","asdf1", "18-02-1990", "Colorado", "United States"},
+          new String[]{"karol@sss.pl","M","Michal","Wisnia2","asc", "02-08-1991", "Alabaf", "-"},
+          new String[]{"karol@sss.pl","W","Iwona","Poranek1","asdf1", "18-02-1990", "Colorado", "United States"},
         };
     }
 

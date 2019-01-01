@@ -125,7 +125,7 @@ public class CreateAnAccountPage {
         //United State is set by default
         if (countrySaveInMap.get(country) != null) {
             //Only USA can be Choose so always value 21
-            select = new Select(countryDropDownListInAddress);
+//            select = new Select(countryDropDownListInAddress);
             select.selectByValue(String.valueOf(countrySaveInMap.get(country)));
             //There are 1-50 option value State but we will use only 10 for practise purpose
             if (statesInUSA.get(stateOfUSA) != null) {
@@ -171,13 +171,15 @@ public class CreateAnAccountPage {
         errorsOccured = dateReturn.errorsOccured;
 
         //--------YOUR ADDRESS FIELDS----------
-        //TU SIĘ PIERDOLI!!!!!!!!!!
         firstNameInAddressInputField.sendKeys("aaaaaaa");
         lastNameInAddressInputField.sendKeys("bbbbbbbbb");
         companyNameInAddressInputField.sendKeys("dddddddd");
         address1InAddressInputField.sendKeys("eeeeeeeee");
         city1InAddressInputField.sendKeys("fffffffff");
-        postalCodeInAddressInputField.sendKeys("00000");
+        //If Country isn`t United States, Postal Code is hidden
+        if(countryDropDownListInAddress.getText().contains("United States")) {
+            postalCodeInAddressInputField.sendKeys("00000");
+        }
         mobilePhoneInAddressInputField.sendKeys("1234567890");
         //Checking errors:
         if (!(Pattern.matches("[a-zA-Z]+", firstName)) || !(Pattern.matches("[a-zA-Z]+", lastName)) || !(Pattern.matches(".{5,}", passwd))) {
