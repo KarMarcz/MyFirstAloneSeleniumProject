@@ -35,23 +35,23 @@ public class RegistrationTest {
     }
     @ParameterizedTest
     @MethodSource
-    public void registrationTest (String email, String gender, String firstName, String lastName, String passwd, String Date, String stateOfUSA, String country) {
+    public void registrationTest (String email, String gender, String firstName, String lastName, String passwd, String Date, String stateOfUSA, String country, Boolean differentDataForYourAddress, String differentFirstName, String differentLastName, String companyName) {
         driver.get("http://automationpractice.com/index.php");
         mainPage.clickOnSingInButton();
         String fillEmailFieldAndClickcreateAnAccountButtonReturnMessage = auteticationPage.fillEmailFieldAndClickcreateAnAccountButton(email);
         assertThat(fillEmailFieldAndClickcreateAnAccountButtonReturnMessage).is(anyOf(emailCondition));
         if(fillEmailFieldAndClickcreateAnAccountButtonReturnMessage.equals("Syntax correct for Email"))
-            System.out.println(createAnAccountPage.fillingPersonalInformationAndAddressAndClickRegisterButton(gender, firstName, lastName, passwd, Date, stateOfUSA, country));
+            System.out.println(createAnAccountPage.fillingPersonalInformationAndAddressAndClickRegisterButton(gender, firstName, lastName, passwd, Date, stateOfUSA, country, differentDataForYourAddress, differentFirstName, differentLastName));
     }
-//    @AfterEach
-//    public void tearDown () {
-//        driver.close();
-//    }
+    @AfterEach
+    public void tearDown () {
+        driver.close();
+    }
 
-    static String[][] registrationTest () {
-        return new String[][]{
-          new String[]{"karol@sss.pl","M","Michal","Wisnia2","asc", "02-08-1991", "Alabaf", "-"},
-          new String[]{"karol@sss.pl","W","Iwona","Poranek1","asdf1", "18-02-1990", "Colorado", "United States"},
+    static Object[][] registrationTest () {
+        return new Object[][]{
+          new Object[]{"karol@sss.pl","M","Michal","Wisnia2","asc", "02-08-1991", "Alabaf", "-", true, "Morswin", "SwinMor", ""},
+          new Object[]{"karol@sss.pl","W","Iwona","Poranek1","asdf1", "18-02-1990", "Colorado", "United States", false, "","", "JM"},
         };
     }
 
@@ -73,4 +73,6 @@ public class RegistrationTest {
         - adress required
         -
      */
+
+    //Zadanie zrobie tak że jeżeli Boolean differentDataForYourAddress jest true to znaczy że nastepne dane mają zastąpić dane w YourAddress, w innym przypadku nic nie rób
 }

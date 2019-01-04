@@ -1,6 +1,7 @@
 package com.automationpractice.pageObject;
 
 import com.automationpractice.utils.Waits;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -143,7 +144,7 @@ public class CreateAnAccountPage {
         return dateReturn;
     }
 
-    public List<String> fillingPersonalInformationAndAddressAndClickRegisterButton(String gender, String firstName, String lastName, String passwd, String Date, String stateOfUSA, String country) {
+    public List<String> fillingPersonalInformationAndAddressAndClickRegisterButton(String gender, String firstName, String lastName, String passwd, String Date, String stateOfUSA, String country, Boolean differentDataForYourAddress, String differentFirstName, String differentLastName) {
         waits.waitForElementToBeClickable(submitAccountInAddressButton);
         List<String> errors = new ArrayList<>();
         Boolean errorsOccured = false;
@@ -171,10 +172,16 @@ public class CreateAnAccountPage {
         errorsOccured = dateReturn.errorsOccured;
 
         //--------YOUR ADDRESS FIELDS----------
-        firstNameInAddressInputField.sendKeys("aaaaaaa");
-        lastNameInAddressInputField.sendKeys("bbbbbbbbb");
+        // change value for shipping data if | differentDataForYourAddress == true |
+        if (differentDataForYourAddress) {
+            firstNameInAddressInputField.sendKeys(Keys.chord(Keys.CONTROL, "a"), differentFirstName);
+            lastNameInAddressInputField.sendKeys(Keys.chord(Keys.CONTROL, "a"), differentLastName);
+        }
+        //Not required
         companyNameInAddressInputField.sendKeys("dddddddd");
+        //Required not NULL but not restricted by any rules of chars
         address1InAddressInputField.sendKeys("eeeeeeeee");
+        //Required not NULL but not restricted by any rules of chars
         city1InAddressInputField.sendKeys("fffffffff");
         //If Country isn`t United States, Postal Code is hidden
         if(country.equals("United States")) {
