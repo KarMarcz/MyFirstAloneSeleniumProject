@@ -144,7 +144,7 @@ public class CreateAnAccountPage {
         return dateReturn;
     }
 
-    public List<String> fillingPersonalInformationAndAddressAndClickRegisterButton(String gender, String firstName, String lastName, String passwd, String Date, String stateOfUSA, String country, Boolean differentDataForYourAddress, String differentFirstName, String differentLastName) {
+    public List<String> fillingPersonalInformationAndAddressAndClickRegisterButton(String gender, String firstName, String lastName, String passwd, String Date, String stateOfUSA, String country, Boolean differentDataForYourAddress, String differentFirstName, String differentLastName, String companyName, String address, String city, String postal) {
         waits.waitForElementToBeClickable(submitAccountInAddressButton);
         List<String> errors = new ArrayList<>();
         Boolean errorsOccured = false;
@@ -178,18 +178,18 @@ public class CreateAnAccountPage {
             lastNameInAddressInputField.sendKeys(Keys.chord(Keys.CONTROL, "a"), differentLastName);
         }
         //Not required
-        companyNameInAddressInputField.sendKeys("dddddddd");
+        companyNameInAddressInputField.sendKeys(companyName);
         //Required not NULL but not restricted by any rules of chars
-        address1InAddressInputField.sendKeys("eeeeeeeee");
+        address1InAddressInputField.sendKeys(address);
         //Required not NULL but not restricted by any rules of chars
-        city1InAddressInputField.sendKeys("fffffffff");
+        city1InAddressInputField.sendKeys(city);
         //If Country isn`t United States, Postal Code is hidden
         if(country.equals("United States")) {
-            postalCodeInAddressInputField.sendKeys("00000");
+            postalCodeInAddressInputField.sendKeys(postal);
         }
         mobilePhoneInAddressInputField.sendKeys("1234567890");
         //Checking errors:
-        if (!(Pattern.matches("[a-zA-Z]+", firstName)) || !(Pattern.matches("[a-zA-Z]+", lastName)) || !(Pattern.matches(".{5,}", passwd))) {
+        if (!(Pattern.matches("[a-zA-Z]+", firstName)) || !(Pattern.matches("[a-zA-Z]+", lastName)) || !(Pattern.matches(".{5,}", passwd)) || address.isEmpty() || city.isEmpty() || !(Pattern.matches("\\d{5}", postal))) {
             errorsOccured = true;
         }
         if (errorsOccured) {
@@ -221,6 +221,15 @@ public class CreateAnAccountPage {
             }
             if (errorsFromBadDataPullingIntoRegisterField.getText().contains("Country is invalid")){
                 errors.add("Country is invalid");
+            }
+            if (errorsFromBadDataPullingIntoRegisterField.getText().contains("address1 is required.")) {
+                errors.add("address1 is required.");
+            }
+            if (errorsFromBadDataPullingIntoRegisterField.getText().contains("city is required.")) {
+                errors.add("city is required.");
+            }
+            if (errorsFromBadDataPullingIntoRegisterField.getText().contains("The Zip/Postal code you've entered is invalid. It must follow this format: 00000")){
+                errors.add("The Zip/Postal code you've entered is invalid. It must follow this format: 00000");
             }
         } else {
             errors.add("Data correct");
