@@ -11,7 +11,9 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.openqa.selenium.WebDriver;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.anyOf;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -23,7 +25,22 @@ public class RegistrationTest {
     private AuteticationPage auteticationPage;
     private CreateAnAccountPage createAnAccountPage;
     private static final LinkedHashSet<String> emailAssertion = newLinkedHashSet("Syntax correct for Email", "Invalid email address.");
-    public static final Condition<String> emailCondition = new Condition<>(emailAssertion::contains, "Condition That check if proper text return from method after passing email into site");
+    private static final LinkedHashSet<String> registrationAssertion = newLinkedHashSet(
+            "firstname is required.",
+            "firstname is invalid.",
+            "lastname is required.",
+            "lastname is invalid.",
+            "passwd is required.",
+            "passwd is invalid.",
+            "This country requires you to choose a State.",
+            "Country cannot be loaded with address->id_country",
+            "Country is invalid",
+            "address1 is required.",
+            "city is required.",
+            "The Zip/Postal code you've entered is invalid. It must follow this format: 00000",
+            "Data correct",
+            "Wrong birth date.");
+    public static final Condition<String> emailCondition = new Condition<>(emailAssertion::contains, "Condition That check if proper text return from method after passing email into site, if you see this message that means that something wrong");
     @BeforeEach
     public void setUp() {
         driver = WebDriverProvider.WebDriverProvider();
@@ -38,20 +55,25 @@ public class RegistrationTest {
     public void registrationTest (String email, String gender, String firstName, String lastName, String passwd, String Date, String stateOfUSA, String country, Boolean differentDataForYourAddress, String differentFirstName, String differentLastName, String companyName, String address, String city, String postal) {
         driver.get("http://automationpractice.com/index.php");
         mainPage.clickOnSingInButton();
+        List<String> allReturnedMessageFromPageAfterTryingToRegisterNewMembere = new ArrayList<>();
+        //Save message to String to assert that email is correct or not, depends on condition in DDT
         String fillEmailFieldAndClickcreateAnAccountButtonReturnMessage = auteticationPage.fillEmailFieldAndClickcreateAnAccountButton(email);
+        //Assert previous message
         assertThat(fillEmailFieldAndClickcreateAnAccountButtonReturnMessage).is(anyOf(emailCondition));
+        //If email passed check the rest condition
         if(fillEmailFieldAndClickcreateAnAccountButtonReturnMessage.equals("Syntax correct for Email"))
-            System.out.println(createAnAccountPage.fillingPersonalInformationAndAddressAndClickRegisterButton(gender, firstName, lastName, passwd, Date, stateOfUSA, country, differentDataForYourAddress, differentFirstName, differentLastName, companyName, address, city, postal));
+            allReturnedMessageFromPageAfterTryingToRegisterNewMembere = createAnAccountPage.fillingPersonalInformationAndAddressAndClickRegisterButton(gender, firstName, lastName, passwd, Date, stateOfUSA, country, differentDataForYourAddress, differentFirstName, differentLastName, companyName, address, city, postal);
+            assertThat(allReturnedMessageFromPageAfterTryingToRegisterNewMembere).isSubsetOf(registrationAssertion);
     }
-//    @AfterEach
-//    public void tearDown () {
-//        driver.close();
-//    }
+    @AfterEach
+    public void tearDown () {
+        driver.close();
+    }
 
     static Object[][] registrationTest () {
         return new Object[][]{
           new Object[]{"karol@sss.pl","M","Michal","Wisnia2","asc", "02-08-1991", "Alabaf", "-", true, "Morswin", "SwinMor", "", "", "", "123"},
-          new Object[]{"karol@sss.pl","W","Iwona","Poranek1","asdf1", "18-02-1990", "Colorado", "United States", false, "","", "JM", "Misiakowa", "Pomostowo", "123"},
+          new Object[]{"karol@sss.pl","W","Iwona","Poranek","asd23", "18-02-1990", "Colorado", "United States", false, "","", "JM", "Misiakowa", "Pomostowo", "12345"},
         };
     }
 
