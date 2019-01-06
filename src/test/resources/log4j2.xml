@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="warn">
+    <Properties>
+        <Property name="logPath">
+            logs/RegistrationTest.log
+        </Property>
+        <Property name="basePath">
+            logs
+        </Property>
+    </Properties>
+    <Appenders>
+        <Console name="Console">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </Console>
+        <File name="file" fileName="${logPath}">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"></PatternLayout>
+        </File>
+        <RollingFile name="fileWithPrettyHTML" fileName="${basePath}/pretty.html" filePattern="${basePath}/pretty_%d{yyyy-MM-dd}.html">
+            <HTMLLayout charset="UTF-8" title="Registration" locationInfo="true" />
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true" />
+                <SizeBasedTriggeringPolicy size="10 MB" />
+            </Policies>
+        </RollingFile>
+        <Async name="Async">
+            <AppenderRef ref="file"/>
+        </Async>
+    </Appenders>
+    <Loggers>
+        <Root level="debug">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="Async"/>
+            <AppenderRef ref="fileWithPrettyHTML"/>
+        </Root>
+    </Loggers>
+</Configuration>

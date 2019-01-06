@@ -10,6 +10,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.openqa.selenium.WebDriver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -24,6 +26,7 @@ public class RegistrationTest {
     private MainPage mainPage;
     private AuteticationPage auteticationPage;
     private CreateAnAccountPage createAnAccountPage;
+    private Logger logger = LoggerFactory.getLogger(RegistrationTest.class);
     private static final LinkedHashSet<String> emailAssertion = newLinkedHashSet("Syntax correct for Email", "Invalid email address.");
     private static final LinkedHashSet<String> registrationAssertion = newLinkedHashSet(
             "firstname is required.",
@@ -64,6 +67,7 @@ public class RegistrationTest {
         if(fillEmailFieldAndClickcreateAnAccountButtonReturnMessage.equals("Syntax correct for Email"))
             allReturnedMessageFromPageAfterTryingToRegisterNewMembere = createAnAccountPage.fillingPersonalInformationAndAddressAndClickRegisterButton(gender, firstName, lastName, passwd, Date, stateOfUSA, country, differentDataForYourAddress, differentFirstName, differentLastName, companyName, address, city, postal);
             assertThat(allReturnedMessageFromPageAfterTryingToRegisterNewMembere).isSubsetOf(registrationAssertion);
+            logger.debug(String.valueOf(allReturnedMessageFromPageAfterTryingToRegisterNewMembere));
     }
     @AfterEach
     public void tearDown () {
@@ -73,7 +77,7 @@ public class RegistrationTest {
     static Object[][] registrationTest () {
         return new Object[][]{
           new Object[]{"karol@sss.pl","M","Michal","Wisnia2","asc", "02-08-1991", "Alabaf", "-", true, "Morswin", "SwinMor", "", "", "", "123"},
-          new Object[]{"karol@sss.pl","W","Iwona","Poranek","asd23", "18-02-1990", "Colorado", "United States", false, "","", "JM", "Misiakowa", "Pomostowo", "12345"},
+//          new Object[]{"karol@sss.pl","W","Iwona","Poranek","asd23", "18-02-1990", "Colorado", "United States", false, "","", "JM", "Misiakowa", "Pomostowo", "12345"},
         };
     }
 
