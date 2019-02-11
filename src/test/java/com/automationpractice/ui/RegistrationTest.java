@@ -27,6 +27,7 @@ public class RegistrationTest {
     private AuteticationPage auteticationPage;
     private CreateAnAccountPage createAnAccountPage;
     private Logger logger = LoggerFactory.getLogger(RegistrationTest.class);
+
     private static final LinkedHashSet<String> emailAssertion = newLinkedHashSet("Syntax correct for Email", "Invalid email address.");
     private static final LinkedHashSet<String> registrationAssertion = newLinkedHashSet(
             "firstname is required.",
