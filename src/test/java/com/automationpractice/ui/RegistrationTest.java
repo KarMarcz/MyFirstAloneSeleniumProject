@@ -60,14 +60,15 @@ public class RegistrationTest {
         mainPage.clickOnSingInButton();
         List<String> allReturnedMessageFromPageAfterTryingToRegisterNewMembere = new ArrayList<>();
         //Save message to String to assert that email is correct or not, depends on condition in DDT
-        String fillEmailFieldAndClickcreateAnAccountButtonReturnMessage = auteticationPage.fillEmailFieldAndClickcreateAnAccountButton(email);
+        String fillEmailFieldAndClickCreateAnAccountButtonReturnMessage = auteticationPage.fillEmailFieldAndClickcreateAnAccountButton(email);
         //Assert previous message
-        assertThat(fillEmailFieldAndClickcreateAnAccountButtonReturnMessage).is(anyOf(emailCondition));
+        assertThat(fillEmailFieldAndClickCreateAnAccountButtonReturnMessage).is(anyOf(emailCondition));
         //If email passed check the rest condition
-        if(fillEmailFieldAndClickcreateAnAccountButtonReturnMessage.equals("Syntax correct for Email"))
-            allReturnedMessageFromPageAfterTryingToRegisterNewMembere = createAnAccountPage.fillingPersonalInformationAndAddressAndClickRegisterButton(gender, firstName, lastName, passwd, Date, stateOfUSA, country, differentDataForYourAddress, differentFirstName, differentLastName, companyName, address, city, postal);
-            assertThat(allReturnedMessageFromPageAfterTryingToRegisterNewMembere).isSubsetOf(registrationAssertion);
-            logger.debug(String.valueOf(allReturnedMessageFromPageAfterTryingToRegisterNewMembere));
+        if(fillEmailFieldAndClickCreateAnAccountButtonReturnMessage.equals("Syntax correct for Email")) allReturnedMessageFromPageAfterTryingToRegisterNewMembere = createAnAccountPage.fillingPersonalInformationAndAddressAndClickRegisterButton(gender, firstName, lastName, passwd, Date, stateOfUSA, country, differentDataForYourAddress, differentFirstName, differentLastName, companyName, address, city, postal);
+
+        System.out.println(allReturnedMessageFromPageAfterTryingToRegisterNewMembere.size());
+        assertThat(allReturnedMessageFromPageAfterTryingToRegisterNewMembere).isSubsetOf(registrationAssertion);
+        logger.debug(String.valueOf(allReturnedMessageFromPageAfterTryingToRegisterNewMembere));
     }
     @AfterEach
     public void tearDown () {
@@ -77,9 +78,16 @@ public class RegistrationTest {
     static Object[][] registrationTest () {
         return new Object[][]{
           new Object[]{"karol@sss.pl","M","Michal","Wisnia2","asc", "02-08-1991", "Alabaf", "-", true, "Morswin", "SwinMor", "", "", "", "123"},
-//          new Object[]{"karol@sss.pl","W","Iwona","Poranek","asd23", "18-02-1990", "Colorado", "United States", false, "","", "JM", "Misiakowa", "Pomostowo", "12345"},
+          new Object[]{"karol@sss.pl","W","Iwona","Poranek","asd23", "18-02-1990", "Alabama", "United States", false, "","", "JM", "Misiakowa", "Pomostowo", "12345"},
         };
     }
+
+
+    //----------------
+    //Zadanie dodatkowe :
+    //Builder dla danych w Parametrized Test
+    //Dodanie warunku co oczekuje że się zepsuje(chyba w sumie bede zwracał liczbe z listy że np. jeżeli miało być 6 złych danych i 6 problemow to 6 bedzie zapisanych)
+    //----------------
 
     /*Zadania:
     -Parametrize Test - DDT

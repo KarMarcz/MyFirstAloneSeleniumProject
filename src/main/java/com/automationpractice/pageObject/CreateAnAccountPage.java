@@ -60,22 +60,19 @@ public class CreateAnAccountPage {
         Boolean errorsOccured = false;
         List<String> errors = new ArrayList<>();
     }
-
-    private static final Map<String, Integer> statesInUSA;
+    private static final Map<String, Integer> statesInUSA = new TreeMap<>();
 
     static {
-        Map<String, Integer> aMap = new TreeMap<>();
-        aMap.put("Alabama", 1);
-        aMap.put("Alaska", 2);
-        aMap.put("Arizona", 3);
-        aMap.put("Arkansas", 4);
-        aMap.put("California", 5);
-        aMap.put("Colorado", 6);
-        aMap.put("Connecticut", 7);
-        aMap.put("Delaware", 8);
-        aMap.put("Florida", 9);
-        aMap.put("Georgia", 10);
-        statesInUSA = Collections.unmodifiableMap(aMap);
+        statesInUSA.put("Alabama", 1);
+        statesInUSA.put("Alaska", 2);
+        statesInUSA.put("Arizona", 3);
+        statesInUSA.put("Arkansas", 4);
+        statesInUSA.put("California", 5);
+        statesInUSA.put("Colorado", 6);
+        statesInUSA.put("Connecticut", 7);
+        statesInUSA.put("Delaware", 8);
+        statesInUSA.put("Florida", 9);
+        statesInUSA.put("Georgia", 10);
     }
     private static final Map<String, String> countrySaveInMap;
 
@@ -93,30 +90,30 @@ public class CreateAnAccountPage {
         PageFactory.initElements(driver, this);
     }
 
-    private DateReturn manageDropDownList(String Date, String stateOfUSA, String country) {
+    private DateReturn manageDropDownList(String date, String stateOfUSA, String country) {
         // ------------------------------------
         // -------Date Should have  DD-MM-YYYY pattern
         //Days always have 1-31 option value, so this is the only Required
         DateReturn dateReturn = new DateReturn();
         select = new Select(countryDropDownListInAddress);
         select.selectByValue(String.valueOf(""));
-        if(Pattern.matches("\\d{2}-\\d{2}-\\d{4}", Date)) {
+        if(Pattern.matches("\\d{2}-\\d{2}-\\d{4}", date)) {
             select = new Select(daysDropDownListInPersonalIinformation);
-            if (Date.startsWith("0")) {
-                select.selectByValue(Date.substring(1, 2));
+            if (date.startsWith("0")) {
+                select.selectByValue(date.substring(1, 2));
             } else {
-                select.selectByValue(Date.substring(0, 2));
+                select.selectByValue(date.substring(0, 2));
             }
             //Months have 1-12 option value
             select = new Select(monthsDropDownListInPersonalIinformation);
-            if (Date.substring(3, 4).equals("0")) {
-                select.selectByValue(Date.substring(4, 5));
+            if (date.substring(3, 4).equals("0")) {
+                select.selectByValue(date.substring(4, 5));
             } else {
-                select.selectByValue(Date.substring(3, 5));
+                select.selectByValue(date.substring(3, 5));
             }
             //Years are Selected strictly like | Year 1991 = "1991" | in option value
             select = new Select(yearsDropDownListInPersonalIinformation);
-            select.selectByValue(Date.substring(6));
+            select.selectByValue(date.substring(6));
         }
         else {
             dateReturn.errors.add("Wrong birth date.");
