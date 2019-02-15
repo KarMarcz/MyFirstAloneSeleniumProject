@@ -41,7 +41,7 @@ public class MainPage {
         singInButton.click();
     }
 
-    public Double addingAllClothesAndReturnPrice() throws InterruptedException {
+    public Double addingAllClothesAndReturnPrice() {
         int numberOfAllProducts = allProductsAvailableInMainPage.size();
         Actions action = new Actions(driver);
         //for totalPrice for assertion
@@ -50,9 +50,9 @@ public class MainPage {
         for (int i = 0; i < numberOfAllProducts; i++) {
             totalPrice = totalPrice + Double.parseDouble(priceStringFromProductFrame.get(i).getText().substring(1));
             action.moveToElement(allProductsAvailableInMainPage.get(i)).build().perform();
-            Thread.sleep(1000);
+            waits.waitForElementToBeClickable(addButtonFromProductFrame.get(i));
             addButtonFromProductFrame.get(i).click();
-            Thread.sleep(3000);
+            waits.waitForElementToBeClickable(continueButtonFromPopUpWindowAfterAddingProduct);
             continueButtonFromPopUpWindowAfterAddingProduct.click();
         }
         if (totalPrice > 0.00) {
@@ -60,11 +60,11 @@ public class MainPage {
         }
         return totalPrice;
     }
-    public Double priceFromCartDropDownMenu() throws InterruptedException {
+    public Double priceFromCartDropDownMenu() {
         //steps to get the total value from dropDown Cart Menu
         Actions action = new Actions(driver);
         action.moveToElement(dropDownMenuCart).build().perform();
-        Thread.sleep(5000);
+        waits.waitForElementToBeVisible(totalPriceInDropDownMenuCart);
         Double totalPriceInCart = Double.parseDouble(totalPriceInDropDownMenuCart.getText().substring(1));
         return totalPriceInCart;
     }
