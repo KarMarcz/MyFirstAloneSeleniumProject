@@ -15,6 +15,8 @@ import org.openqa.selenium.support.ui.Select;
 
 import javax.swing.*;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class HomePageTest {
@@ -32,14 +34,21 @@ public class HomePageTest {
         createAnAccountPage = new CreateAnAccountPage(driver);
     }
     @Test
-    public void addingAllClothesAndCheckIfThePrizeIsCorrect() throws InterruptedException {
+    public void addingAllClothesAndCheckIfThePrizeIsCorrect(){
         driver.get("http://automationpractice.com/index.php");
         Double sumOfPriceCollectincWhenAddingClothes = mainPage.addingAllClothesAndReturnPrice();
         Double totalPriceFromDropDownMenuCart = mainPage.priceFromCartDropDownMenu();
         assertThat(sumOfPriceCollectincWhenAddingClothes).isEqualTo(totalPriceFromDropDownMenuCart).as("The Cost of Clothes sum is Diffrent to the sum in DropDownMenuCart");
     }
+    @Test
+    public void clickOnEveryLinkInInformationSectionAndCheckIfItsGoesToProperSite(){
+        driver.get("http://automationpractice.com/index.php");
+        List<String> allLinksBeforeTabsOpen = mainPage.getAllTitlesBeforeOpenTabs();
+        List<String> allLinksTitle = mainPage.clickOnEveryLinkInInformationSection();
+        assertThat(allLinksTitle).isEqualTo(allLinksBeforeTabsOpen);
+    }
     @AfterEach
     public void tearDown () {
-        driver.close();
+        driver.quit();
     }
 }
