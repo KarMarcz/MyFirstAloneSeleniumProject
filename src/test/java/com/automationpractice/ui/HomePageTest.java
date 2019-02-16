@@ -15,6 +15,7 @@ import org.openqa.selenium.support.ui.Select;
 
 import javax.swing.*;
 
+import java.io.IOException;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -34,7 +35,7 @@ public class HomePageTest {
         createAnAccountPage = new CreateAnAccountPage(driver);
     }
     @Test
-    public void addingAllClothesAndCheckIfThePrizeIsCorrect(){
+    public void addingAllClothesAndCheckIfThePrizeIsCorrect() throws IOException {
         driver.get("http://automationpractice.com/index.php");
         Double sumOfPriceCollectincWhenAddingClothes = mainPage.addingAllClothesAndReturnPrice();
         Double totalPriceFromDropDownMenuCart = mainPage.priceFromCartDropDownMenu();

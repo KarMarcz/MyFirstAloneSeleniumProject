@@ -21,6 +21,7 @@
         <version.slf4j-api>1.7.25</version.slf4j-api>
         <version.log4j-slf4j-impl>2.11.1</version.log4j-slf4j-impl>
         <version.commons-lang3>3.8.1</version.commons-lang3>
+        <version.common-io>2.6</version.common-io>
     </properties>
 
     <build>
@@ -53,6 +54,13 @@
     </build>
 
     <dependencies>
+        <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>${version.common-io}</version>
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/junit/junit -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>

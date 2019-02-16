@@ -1,14 +1,14 @@
 package com.automationpractice.pageObject;
 
 import com.automationpractice.utils.Waits;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.apache.commons.io.FileUtils;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -108,12 +108,14 @@ public class MainPage {
         }
         return totalPrice;
     }
-    public Double priceFromCartDropDownMenu() {
+    public Double priceFromCartDropDownMenu() throws IOException {
         //steps to get the total value from dropDown Cart Menu
         Actions action = new Actions(driver);
         action.moveToElement(dropDownMenuCart).build().perform();
         waits.waitForElementToBeVisible(totalPriceInDropDownMenuCart);
         Double totalPriceInCart = Double.parseDouble(totalPriceInDropDownMenuCart.getText().substring(1));
+        File screenShot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+        FileUtils.copyFile(screenShot,new File("screenshots/screenshot.png"));
         return totalPriceInCart;
     }
 }
